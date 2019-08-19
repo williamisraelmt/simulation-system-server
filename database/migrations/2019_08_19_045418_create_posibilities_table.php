@@ -15,15 +15,17 @@ class CreatePosibilitiesTable extends Migration
     {
         Schema::create('posibilities', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->boolean('is_success');
-            $table->boolean('time_exceeding_probability');
-            $table->float('probability');
-            $table->unsignedInteger('service_phase_id');
-            $table->unsignedInteger('next_service_phase_id');
+            $table->string("description");
+            $table->boolean('is_success')->nullable()->default(true);
+            $table->boolean('time_exceeding_probability')->nullable()->default(false);
+            $table->float('min_interval');
+            $table->float('max_interval');
+            $table->unsignedBigInteger('service_phase_id');
+            $table->unsignedBigInteger('next_service_phase_id');
             $table->timestamps();
         });
 
-        Schema::table('posibility_recommendations', function (Blueprint $table) {
+        Schema::table('posibilities', function (Blueprint $table) {
             $table->foreign('service_phase_id')->references('id')->on('service_phases');
             $table->foreign('next_service_phase_id')->references('id')->on('service_phases');
         });

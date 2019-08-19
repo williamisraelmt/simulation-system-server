@@ -18,7 +18,12 @@ class CreateSimulationsTable extends Migration
             $table->integer('service_people');
             $table->integer('max_in_room_customers');
             $table->integer('max_customers');
+            $table->unsignedBigInteger('schedule_id');
             $table->timestamps();
+        });
+
+        Schema::table('simulations', function (Blueprint $table) {
+           $table->foreign('schedule_id')->references('id')->on('schedules');
         });
     }
 

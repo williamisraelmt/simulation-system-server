@@ -13,11 +13,21 @@ class CreateSimulationDetailLogsTable extends Migration
      */
     public function up()
     {
-        simulation_detail_logs	client_id	service_phase_id	start_time	end_time
+
         Schema::create('simulation_detail_logs', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigIncrements('id');
+            $table->time('start_time');
+            $table->time('end_time')->nullable();
+            $table->unsignedBigInteger('service_phase_id')->nullable();
+            $table->unsignedBigInteger('simulation_detail_id');
+            $table->unsignedBigInteger('posibility_id')->nullable();
             $table->timestamps();
+        });
+
+        Schema::table('simulation_detail_logs', function (Blueprint $table){
+            $table->foreign('service_phase_id')->references('id')->on('service_phases');
+            $table->foreign('simulation_detail_id')->references('id')->on('simulation_details');
+            $table->foreign('posibility_id')->references('id')->on('posibilities');
         });
     }
 

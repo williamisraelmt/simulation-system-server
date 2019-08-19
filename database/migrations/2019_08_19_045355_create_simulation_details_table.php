@@ -13,12 +13,22 @@ class CreateSimulationDetailsTable extends Migration
      */
     public function up()
     {
-        id	client_id	service_phase_id	done	start_time	end_time
         Schema::create('simulation_details', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('client_id');
-            $table->phase_id('client_id');
+            $table->integer('client');
+            $table->boolean('done')->nullable()->default(false);
+            $table->time('start_time');
+            $table->time('end_time')->nullable();
+            $table->unsignedBigInteger('service_phase_id')->nullable();
+            $table->unsignedBigInteger('simulation_service_people_id')->nullable();
+            $table->unsignedBigInteger('simulation_id');
             $table->timestamps();
+        });
+
+        Schema::table('simulation_details', function (Blueprint $table){
+            $table->foreign('service_phase_id')->references('id')->on('service_phases');
+            $table->foreign('simulation_service_people_id')->references('id')->on('simulation_service_people');
+            $table->foreign('simulation_id')->references('id')->on('simulations');
         });
     }
 

@@ -16,7 +16,7 @@ class CreatePosibilityRecommendationsTable extends Migration
         Schema::create('posibility_recommendations', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('description');
-            $table->unsignedInteger('posibility_id');
+            $table->unsignedBigInteger('posibility_id');
             $table->timestamps();
         });
 

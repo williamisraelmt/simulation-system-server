@@ -13,17 +13,21 @@ class CreateServicePhasesTable extends Migration
      */
     public function up()
     {
+
         Schema::create('service_phases', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedInteger('service_id');
-            $table->unsignedInteger('phase_id');
+            $table->unsignedBigInteger('service_id');
+            $table->unsignedBigInteger('phase_id');
+            $table->integer('execution_order');
+            $table->float('approximate_time');
             $table->timestamps();
         });
 
-        Schema::table('posibility_recommendations', function (Blueprint $table){
+        Schema::table('service_phases', function (Blueprint $table){
             $table->foreign('service_id')->references('id')->on('services');
             $table->foreign('phase_id')->references('id')->on('phases');
         });
+
     }
 
     /**

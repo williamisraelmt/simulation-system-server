@@ -15,14 +15,14 @@ class CreateDiscardedPosibilitiesTable extends Migration
     {
         Schema::create('discarded_posibilities', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedInteger('simulation_detail_id');
+            $table->unsignedBigInteger('simulation_detail_id');
+            $table->unsignedBigInteger('posibility_id');
             $table->timestamps();
         });
 
         Schema::table('discarded_posibilities', function (Blueprint $table) {
-            $table->bigIncrements('id');
             $table->foreign('simulation_detail_id')->references('id')->on('simulation_details');
-            $table->timestamps();
+            $table->foreign('posibility_id')->references('id')->on('posibilities');
         });
     }
 
