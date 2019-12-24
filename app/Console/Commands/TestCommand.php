@@ -11,6 +11,7 @@ use App\SimulationDetail;
 use App\SimulationDetailLog;
 use App\SimulationServicePeople;
 use Carbon\Carbon;
+use DB;
 use Illuminate\Console\Command;
 
 class TestCommand extends Command
@@ -47,14 +48,11 @@ class TestCommand extends Command
     public function handle()
     {
 
-
         $service_people = 3;
         $schedule_id = Schedule::first()->id;
 
         $counter = 0;
-        $counter_limit = 20;
-
-        $done = false;  // TODO: Esto es para probar
+        $counter_limit = 200;
 
         // Creando el header de la simulación
         $simulation = new Simulation();
@@ -80,10 +78,10 @@ class TestCommand extends Command
         // Creando el detalle de la simulación
         while ($counter < $counter_limit) {
             $start_time = $initial_time->toTimeString();
-            if (1 === 1  && !$done) { // Define si se insertará un cliente de forma random. mt_rand(0, 1)   // TODO: Esto es para probar
+            if (mt_rand(0, 1) === 1) { // Define si se insertará un cliente de forma random.
                 $client_counter = 0;
                 #TODO: Reemplazar 1,3 por min_range y max_range de schedules
-                while ($client_counter < mt_rand(1, 1)) { // Insertará una cantidad random de clientes dependiendo de la tanda.
+                while ($client_counter < mt_rand(1, 3)) { // Insertará una cantidad random de clientes dependiendo de la tanda.
                     $simulation_detail = new SimulationDetail();
                     $simulation_detail->client = mt_rand(0, 100000);
                     $simulation_detail->start_time = $start_time;
@@ -93,7 +91,6 @@ class TestCommand extends Command
                     echo "Customer " . $simulation_detail->client . " arrived at " . $start_time . "\n";
                     $client_counter++;
                 }
-                $done = true; // TODO: Esto es para probar
             } else {
                 echo "No hay clientes nuevas \n";
             }
@@ -114,7 +111,7 @@ class TestCommand extends Command
                 $customer_end_time = Carbon::createFromTimeString($customer['end_time']);
                 // Si el tiempo que el cliente ha durado es menor al tiempo aproximado que dura el proceso, quiere decir que el cliente no ha terminado
 
-                if ($customer_start_time->diffInSeconds($customer_end_time) < 2) { // < $customer->servicePhase->approximate_time
+                if ($customer_start_time->diffInSeconds($customer_end_time) < $customer->servicePhase->approximate_time) {
                     $customer->end_time = $customer_end_time->addSeconds(1)->toTimeString();
                     $customer->save();
                 } else {
@@ -143,8 +140,11 @@ class TestCommand extends Command
                         $service_people->available = 1;
                         $service_people->save();
                         $customer->simulation_service_people_id = null;
+                        $start_end_data = DB::table('simulation_detail_logs')->whereRaw('simulation_detail_id = ' . $customer->id)->selectRaw("MIN(start_time) as start_time, MAX(end_time) as end_time")->first();
+                        $customer->start_time = $start_end_data->start_time;
+                        $customer->end_time = $start_end_data->end_time;
                         $customer->done = 1;
-                        echo "El cliente " . $customer->id . " salió por " . $probability->description . "\n";
+                        echo "El cliente " . $customer->id . " salió, razón: " . $probability->description . "\n";
                         $customer->save();
                     }
 
@@ -181,7 +181,6 @@ class TestCommand extends Command
 
                     } catch (\Exception $e) {
                         echo $e->getMessage();
-                        die();
                     }
                     if (empty($on_queue_customers)) { // Si ya no hay más personas en queue, sale del ciclo.
                         break;
@@ -194,6 +193,8 @@ class TestCommand extends Command
             $initial_time->addSeconds(1);
             sleep(5);
             $counter++;
+
+
         }
 
     }

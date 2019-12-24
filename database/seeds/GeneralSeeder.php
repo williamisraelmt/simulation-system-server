@@ -100,35 +100,35 @@ class GeneralSeeder extends Seeder
         $service_phases_1_born_act->service_id = $born_act->id;
         $service_phases_1_born_act->phase_id = $provide_documents->id;
         $service_phases_1_born_act->execution_order = 1;
-        $service_phases_1_born_act->approximate_time = 10;
+        $service_phases_1_born_act->approximate_time = 3;
         $service_phases_1_born_act->save();
 
         $service_phases_2_born_act = new ServicePhase();
         $service_phases_2_born_act->service_id = $born_act->id;
         $service_phases_2_born_act->phase_id = $document_review->id;
         $service_phases_2_born_act->execution_order = 2;
-        $service_phases_2_born_act->approximate_time = 20;
+        $service_phases_2_born_act->approximate_time = 2;
         $service_phases_2_born_act->save();
 
         $service_phases_3_born_act = new ServicePhase();
         $service_phases_3_born_act->service_id = $born_act->id;
         $service_phases_3_born_act->phase_id = $template_print->id;
         $service_phases_3_born_act->execution_order = 3;
-        $service_phases_3_born_act->approximate_time = 10;
+        $service_phases_3_born_act->approximate_time = 5;
         $service_phases_3_born_act->save();
 
         $service_phases_4_born_act = new ServicePhase();
         $service_phases_4_born_act->service_id = $born_act->id;
         $service_phases_4_born_act->phase_id = $official_document_print->id;
         $service_phases_4_born_act->execution_order = 4;
-        $service_phases_4_born_act->approximate_time = 10;
+        $service_phases_4_born_act->approximate_time = 3;
         $service_phases_4_born_act->save();
 
         $service_phases_5_born_act = new ServicePhase();
         $service_phases_5_born_act->service_id = $born_act->id;
         $service_phases_5_born_act->phase_id = $payment->id;
         $service_phases_5_born_act->execution_order = 5;
-        $service_phases_5_born_act->approximate_time = 10;
+        $service_phases_5_born_act->approximate_time = 2;
         $service_phases_5_born_act->save();
 
         $service_phases_6_born_act = new ServicePhase();
